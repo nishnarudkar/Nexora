@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 from typing import List, Optional, Dict, Any
+from uuid import UUID
 
 class CountryProfileBase(BaseModel):
     name: str
@@ -14,7 +15,7 @@ class CountryProfileCreate(CountryProfileBase):
     pass
 
 class CountryProfile(CountryProfileBase):
-    id: int
+    id: UUID
 
     class Config:
         from_attributes = True
@@ -44,8 +45,8 @@ class AssessmentCreate(AssessmentBase):
     pass
 
 class Assessment(AssessmentBase):
-    id: int
-    country_id: int
+    id: UUID
+    country_id: UUID
 
     class Config:
         from_attributes = True
@@ -64,8 +65,27 @@ class RoadmapCreate(RoadmapBase):
     pass
 
 class Roadmap(RoadmapBase):
-    id: int
-    assessment_id: int
+    id: UUID
+    assessment_id: UUID
 
     class Config:
         from_attributes = True
+
+class HRAnalysis(BaseModel):
+    current_personnel: Dict[str, int]
+    required_personnel: Dict[str, int]
+    deficit: Dict[str, int]
+    skill_gap_matrix: List[Dict[str, str]]
+    university_partnerships: List[str]
+
+class FinanceAnalysis(BaseModel):
+    feasibility_score: float
+    capex_estimates: Dict[str, float]
+    recommended_model: str
+    risk_factors: List[str]
+
+class BenchmarkingAnalysis(BaseModel):
+    target_country: str
+    peer_countries: List[Dict[str, Any]]
+    best_practices: List[str]
+    recommended_approach: str

@@ -1,11 +1,13 @@
+import uuid
 from sqlalchemy import Column, Integer, String, Float, ForeignKey, JSON
 from sqlalchemy.orm import relationship
-from database import Base
+from sqlalchemy.types import Uuid
+from app.db.database import Base
 
 class CountryProfile(Base):
     __tablename__ = "country_profiles"
 
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(Uuid, primary_key=True, default=uuid.uuid4, index=True)
     name = Column(String, unique=True, index=True)
     population = Column(Integer)
     gdp = Column(Float)  # in billions
@@ -19,8 +21,8 @@ class CountryProfile(Base):
 class Assessment(Base):
     __tablename__ = "assessments"
 
-    id = Column(Integer, primary_key=True, index=True)
-    country_id = Column(Integer, ForeignKey("country_profiles.id"))
+    id = Column(Uuid, primary_key=True, default=uuid.uuid4, index=True)
+    country_id = Column(Uuid, ForeignKey("country_profiles.id"))
     
     # Infrastructure
     nuclear_policy = Column(String)
@@ -52,8 +54,8 @@ class Assessment(Base):
 class Roadmap(Base):
     __tablename__ = "roadmaps"
 
-    id = Column(Integer, primary_key=True, index=True)
-    assessment_id = Column(Integer, ForeignKey("assessments.id"))
+    id = Column(Uuid, primary_key=True, default=uuid.uuid4, index=True)
+    assessment_id = Column(Uuid, ForeignKey("assessments.id"))
 
     readiness_index = Column(JSON) # {"hr": 72, "financing": 85, ... "overall": 74}
     workforce_requirements = Column(JSON) # {"engineers": 50, "operators": 30, ...}

@@ -1,4 +1,4 @@
-# AtomReady Platform
+# Nexora Platform
 
 AI-powered Nuclear Infrastructure Planning and Decision Intelligence Platform.
 

@@ -17,8 +17,8 @@ export default function Home() {
         </div>
 
         <h1 className="text-6xl md:text-8xl font-extrabold tracking-tight mb-6">
-          <span className="text-white">Atom</span>
-          <span className="gradient-text">Ready</span>
+          <span className="text-white">Nex</span>
+          <span className="gradient-text">ora</span>
         </h1>
         
         <p className="text-xl md:text-2xl text-slate-300 mb-12 max-w-3xl leading-relaxed">

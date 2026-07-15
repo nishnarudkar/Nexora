@@ -1,11 +1,11 @@
 "use client";
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid, Gauge } from 'recharts';
+import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts';
 import { Activity, ShieldCheck, DollarSign, Users, CheckCircle2, ChevronRight, Globe, AlertTriangle } from 'lucide-react';
 
-export default function ReportPage() {
+function ReportContent() {
   const searchParams = useSearchParams();
   const assessmentId = searchParams.get('assessmentId');
   const [reportData, setReportData] = useState<any>(null);
@@ -14,8 +14,11 @@ export default function ReportPage() {
   useEffect(() => {
     if (assessmentId) {
       const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
-      fetch(`${apiUrl}/api/generate-roadmap/${assessmentId}`, { method: 'POST' })
-        .then(res => res.json())
+      fetch(`${apiUrl}/api/v1/roadmap/generate/${assessmentId}`, { method: 'POST' })
+        .then(res => {
+          if (!res.ok) throw new Error("Failed to load report");
+          return res.json();
+        })
         .then(data => {
           setReportData(data);
           setLoading(false);
@@ -36,7 +39,7 @@ export default function ReportPage() {
     );
   }
 
-  if (!reportData) return <div className="p-8 text-center">Error loading report</div>;
+  if (!reportData || reportData.detail) return <div className="p-8 text-center text-white">Error loading report. Please try again.</div>;
 
   const radarData = [
     { subject: 'Human Resources', A: reportData.readiness_index.human_resources, fullMark: 100 },
@@ -192,5 +195,18 @@ export default function ReportPage() {
       </div>
 
     </div>
+  );
+}
+
+export default function ReportPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex flex-col items-center justify-center">
+        <div className="w-16 h-16 border-4 border-blue-500/20 border-t-blue-500 rounded-full animate-spin mb-4" />
+        <h2 className="text-xl font-medium text-blue-200">Loading Report...</h2>
+      </div>
+    }>
+      <ReportContent />
+    </Suspense>
   );
 }

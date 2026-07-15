@@ -16,6 +16,7 @@ export default function AssessmentPage() {
   const router = useRouter();
   const [currentStep, setCurrentStep] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   // Form State
   const [formData, setFormData] = useState({
@@ -71,9 +72,10 @@ export default function AssessmentPage() {
 
   const submitAssessment = async () => {
     setIsSubmitting(true);
+    setErrorMsg(null);
     try {
       const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
-      const countryRes = await fetch(`${apiUrl}/api/countries/`, {
+      const countryRes = await fetch(`${apiUrl}/api/v1/countries/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -92,13 +94,11 @@ export default function AssessmentPage() {
         const cData = await countryRes.json();
         countryId = cData.id;
       } else {
-        // If exists or error, we might need a workaround for prototype.
-        // For now, assuming fresh DB each time or ignoring error for demo.
-        countryId = 1; 
+        throw new Error("Failed to create or fetch country profile");
       }
 
       // 2. Create Assessment
-      const assessmentRes = await fetch(`${apiUrl}/api/assessments/${countryId}`, {
+      const assessmentRes = await fetch(`${apiUrl}/api/v1/assessments/${countryId}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -125,10 +125,13 @@ export default function AssessmentPage() {
         const aData = await assessmentRes.json();
         // 3. Navigate to Report
         router.push(`/report?assessmentId=${aData.id}`);
+      } else {
+        throw new Error("Failed to submit assessment");
       }
 
     } catch (error) {
       console.error(error);
+      setErrorMsg("An error occurred while generating the report. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -291,6 +294,12 @@ export default function AssessmentPage() {
             )}
           </button>
         </div>
+
+        {errorMsg && (
+          <div className="mt-4 p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-center">
+            <p className="text-sm text-red-400">{errorMsg}</p>
+          </div>
+        )}
 
       </div>
     </div>

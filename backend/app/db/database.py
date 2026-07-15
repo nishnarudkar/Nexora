@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # We will use SQLite as a fallback if no PostgreSQL DATABASE_URL is provided for local dev/testing
-SQLALCHEMY_DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./atomready.db")
+SQLALCHEMY_DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./nexora.db")
 
 if SQLALCHEMY_DATABASE_URL.startswith("sqlite"):
     engine = create_engine(
