@@ -4,6 +4,10 @@
   <em>AI-powered Nuclear Infrastructure Planning and Decision Intelligence Platform.</em>
 </p>
 
+<p align="center">
+  <strong>🔴 Live Demo:</strong> <a href="https://nexora-frontend-y3hv.onrender.com">https://nexora-frontend-y3hv.onrender.com</a>
+</p>
+
 ## 🌟 Overview
 
 Nexora is a comprehensive platform designed to facilitate and accelerate the planning, assessment, and management of nuclear infrastructure for the Rosatom HackAtom. By leveraging AI-driven insights, Nexora provides stakeholders with an interactive dashboard, readiness assessments, and specialized intelligence modules for human resources, finance, and global benchmarking.
